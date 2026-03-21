@@ -2,6 +2,7 @@ import { useState } from "react";
 import reactLogo from "../assets/react.svg";
 import viteLogo from "../assets/vite.svg";
 import heroImg from "../assets/hero.png";
+import Login from "./login";
 const LandingPage = () => {
   const [count, setCount] = useState(0);
 
@@ -15,6 +16,7 @@ const LandingPage = () => {
         </div>
         <div>
           <h1>Get started</h1>
+          <Login />
           <p>
             Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
           </p>
