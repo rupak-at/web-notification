@@ -5,16 +5,38 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
   const handleSignIn = async () => {
-    const details = await signInWithPopup(auth, googleProvider);
-    console.log(details);
-// details.user
-// displayName
-// email
-// "secondfirst284@gmail.com"
-// phoneNumber
-// photoURL
+    try {
+      const details = await signInWithPopup(auth, googleProvider);
+      const token = await details.user.getIdToken();
 
-    navigate("/dashboard");
+      const res = await fetch("http://localhost:4001/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token,
+          details: {
+            name: details.user.displayName,
+            email: details.user.email,
+            phone_number: details.user.phoneNumber,
+            photo_url: details.user.photoURL,
+          },
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data?.token) {
+        console.error("Login failed", data);
+        return;
+      }
+
+      localStorage.setItem("token", data.token);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error(err);
+    }
   };
   return (
     <div className="text-white font-bold text-center">

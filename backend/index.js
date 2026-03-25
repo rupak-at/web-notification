@@ -1,6 +1,8 @@
 import e from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 import route from "./router/index.js";
+dotenv.config();
 
 const app = e();
 const PORT = process.env.PORT || 3000;
@@ -16,5 +18,5 @@ app.get("/", (_, res) => {
 app.use("/api", route);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT} in ${process.env.NODE_ENV} mode`);
 });
