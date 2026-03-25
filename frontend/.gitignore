@@ -1,0 +1,58 @@
+# ========================
+# Node dependencies
+# ========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ========================
+# Environment files
+# ========================
+.env
+.env.*           # all environment variants
+!.env.example    # keep example file in repo
+
+# ========================
+# Vite / Build output
+# ========================
+dist/
+.vite/
+
+# ========================
+# Editor / IDE files
+# ========================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# ========================
+# OS files
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========================
+# Coverage / Testing
+# ========================
+coverage/
+
+# ========================
+# Logs / Temporary
+# ========================
+logs/
+*.log
+tmp/
+temp/
+.cache/
+
+# ========================
+# Misc / Optional
+# ========================
+*.bak
+*.old
