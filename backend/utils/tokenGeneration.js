@@ -6,7 +6,7 @@ export const generateToken = (payload) => {
   });
 };
 
-export const verifyToken = (token) => {
+export const validateToken = (token) => {
   try {
     return jwt.verify(token, process.env.JWT_SECRET);
   } catch (error) {
