@@ -93,10 +93,9 @@ router.get("/notifications", verifyToken, async (req, res) => {
   }
 });
 
-router.get(
+router.post(
   "/send-notification",
-  // verifyToken,
-
+  verifyToken,
   async (req, res) => {
     try {
       const users = await db("users as u")
@@ -111,7 +110,11 @@ router.get(
         );
 
       if (users.length === 0) {
-        return res.status(400).json({ message: "No Notifications Available" });
+        return res.status(200).json({ 
+          message: "No pending notifications to send",
+          success: 0,
+          failed: 0 
+        });
       }
 
       const results = await Promise.allSettled(
@@ -122,6 +125,9 @@ router.get(
               title: user.title,
               body: user.message,
             },
+            data: {
+              notification_id: String(user.notification_id)
+            }
           };
 
           return firebaseAdmin.messaging().send(message);
@@ -141,6 +147,7 @@ router.get(
             notification_id: notificationId,
             error_message: result.reason?.message || "Unknown error",
           });
+          console.error(`Failed to send notification ${notificationId}:`, result.reason);
         }
       });
 
@@ -167,7 +174,7 @@ router.get(
       });
     } catch (error) {
       console.error("Error While Sending Notification:", error);
-      res.status(500).json({ message: "Internal Server Error" });
+      res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
   },
 );
