@@ -1,6 +1,7 @@
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
+import api from "../config/api";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -9,26 +10,18 @@ const Login = () => {
       const details = await signInWithPopup(auth, googleProvider);
       const token = await details.user.getIdToken();
 
-      const res = await fetch("http://localhost:4001/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const { data } = await api.post("/login", {
+        token,
+        details: {
+          name: details.user.displayName,
+          email: details.user.email,
+          phone_number: details.user.phoneNumber,
+          photo_url: details.user.photoURL,
         },
-        body: JSON.stringify({
-          token,
-          details: {
-            name: details.user.displayName,
-            email: details.user.email,
-            phone_number: details.user.phoneNumber,
-            photo_url: details.user.photoURL,
-          },
-        }),
       });
 
-      const data = await res.json();
-
-      if (!res.ok || !data?.token) {
-        console.error("Login failed", data);
+      if (!data.token) {
+        console.error("No token received from server");
         return;
       }
 
